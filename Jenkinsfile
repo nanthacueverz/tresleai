@@ -6,7 +6,7 @@ pipeline {
             steps {
                 // Run the unit tests
                 // cargo test
-                echo 'Unit tests function'
+                echo 'Unit tests function deleted'
                 // connect to document db
             }
         }
