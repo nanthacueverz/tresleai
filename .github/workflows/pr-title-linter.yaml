@@ -1,0 +1,19 @@
+# CI workflow: lint the PR title. Should match the commit convention.
+name: PR lint
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+permissions:
+  pull-requests: write
+
+jobs:
+  pr_title_linter:
+    uses: tresleai/tresleai-utils-common/.github/workflows/reusable_pr-title-linter.yaml@develop
+    secrets:
+      TRESLEAI_GITHUB_TOKEN: ${{ secrets.TRESLEAI_GITHUB_TOKEN }}

@@ -1,0 +1,8 @@
+.github
+*.log
+docker-compose.yml
+README.md
+tests
+.gitignore
+.global.yaml
+.local.yaml

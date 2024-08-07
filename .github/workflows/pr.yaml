@@ -1,0 +1,29 @@
+# CI workflow: Perform cargo check and run unit tests on the PR
+name: PR
+
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'src/**'
+      - 'submodules/**'
+      - 'Cargo.lock'
+      - 'Cargo.toml'
+      - 'Dockerfile'
+      - 'tests/**'
+      - 'test_artifacts/**'
+
+jobs:
+  validate_build:
+    uses: tresleai/tresleai-utils-common/.github/workflows/reusable_validate-build.yaml@develop
+    with:
+      paths: '["src/**", "submodules/**", "python_libs/**", "Cargo.lock", "Cargo.toml", "Dockerfile", "tests/**", "test_artifacts/**"]'
+
+  test:
+    needs: validate_build
+    uses: tresleai/tresleai-utils-common/.github/workflows/reusable_pr-test.yaml@develop
+    with:
+      SHOULD_SKIP: ${{ needs.validate_build.outputs.should_skip }}
+    secrets:  
+      TRESLEAI_GITHUB_TOKEN: ${{ secrets.TRESLEAI_GITHUB_TOKEN }}

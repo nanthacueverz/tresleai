@@ -1,0 +1,81 @@
+{
+  "app_name": "facade-app-testing",
+  "app_description": "This is a test app",
+  "text_embedding_model": {
+    "model_id": "amazon.titan-embed-text-v2:0",
+    "platform": "bedrock",
+    "dimension": 1024
+  },
+  "multimodal_embedding_model": {
+    "model_id": "amazon.titan-embed-image-v1",
+    "platform": "bedrock",
+    "dimension": 1024
+  },
+  "allowed_models": [
+    {
+      "name": "haiku",
+      "description": "model1 description",
+      "model_type": "LLM",
+      "model_id": "anthropic.claude-3-haiku-20240307-v1:0"
+    },
+    {
+      "name": "sonnet",
+      "description": "model2 description",
+      "model_type": "LLM",
+      "model_id": "anthropic.claude-3-sonnet-20240229-v1:0"
+    },
+    {
+      "name": "gpt",
+      "description": "openai-api",
+      "model_type": "LLM",
+      "model_id": "gpt-4-0125-preview",
+      "secret_name": "openai-api-key"
+    }
+  ],
+  "app_datasource": {
+    "filestore": {
+      "s3": [
+        {
+          "url": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508.pdf",
+          "hints": [
+            {
+              "prefix": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508-hint-1",
+              "descriptions": "xxx"
+            },
+            {
+              "prefix": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508-hint-2",
+              "descriptions": "yyy"
+            }
+          ]
+        },
+        {
+          "url": "s3://tresleai-test-s3/*.pdf",
+          "hints": [
+            {
+              "prefix": "s3://tresleai-test-s3/*.pdf-hint-1",
+              "descriptions": "xxx"
+            },
+            {
+              "prefix": "s3://tresleai-test-s3/*.pdf-hint-2",
+              "descriptions": "yyy"
+            }
+          ]
+        },
+        {
+          "url": "s3://tresleai-test-s3/*",
+          "hints": [
+            {
+              "prefix": "s3://tresleai-test-s3/*-hint-1",
+              "descriptions": "xxx"
+            },
+            {
+              "prefix": "s3://tresleai-test-s3/*-hint-2",
+              "descriptions": "yyy"
+            }
+          ]
+        }
+      ]
+    },
+    "datastore": {}
+  }
+}

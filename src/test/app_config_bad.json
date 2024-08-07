@@ -1,0 +1,69 @@
+{
+  "filestore": {
+    "s3": [
+      {
+        "url": "s4://badfoldername/tresleai-test-s3/2020-Laboratory-Procedures-508.pdf",
+        "hints": [
+          {
+            "prefix": "s3://tresleai-test-s3/2020-Laboratory-Procedures-508-hint-1",
+            "descriptions": "xxx"
+          },
+          {
+            "prefix": "s3://tresleai-test-s3/2020-Laboratory-Procedures-508-hint-2",
+            "descriptions": "yyy"
+          }
+        ]
+      },
+      {
+        "url": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508.pdf",
+        "hints": [
+          {
+            "prefix": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508-hint-1",
+            "descriptions": "xxx"
+          },
+          {
+            "prefix": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508-hint-2",
+            "descriptions": "yyy"
+          }
+        ]
+      },
+      {
+        "url": "s3://tresleai-test-s3/*.pdf",
+        "hints": [
+          {
+            "prefix": "s3://tresleai-test-s3/*.pdf-hint-1",
+            "descriptions": "xxx"
+          },
+          {
+            "prefix": "s3://tresleai-test-s3/*.pdf-hint-2",
+            "descriptions": "yyy"
+          }
+        ]
+      }
+    ]
+  },
+  "datastore": {
+    "rds_mysql": [
+      {
+        "host": "tresleai-db.c3o0qama8spy.us-west-2.rds.amazonaws.com",
+        "port": "3306",
+        "username": "admin",
+        "secret_name": "rds!db-747087fa-d924-42cf-a2f5-a8f5aac181bf",
+        "database": "tresleai_db",
+        "db_type": "mysql",
+        "descriptions": "",
+        "tables": [
+          {
+            "name": "VenipunctureLabTests",
+            "descriptions": "",
+            "schema": "schema1",
+            "columns": [
+              { "name": "column1", "descriptions": "" },
+              { "name": "column2", "descriptions": "" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

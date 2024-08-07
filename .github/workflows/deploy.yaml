@@ -1,0 +1,57 @@
+# CI workflow: build rust binary, cache the cargo dependencies, build and push the docker image to ECR
+name: Facade Service
+
+on:
+  push:
+    branches:
+      - develop
+    tags:
+      - 'v*'
+    # run this workflow on if there are changes in these paths.
+    paths:
+      - 'src/**'
+      - 'submodules/**'
+      - 'Cargo.lock'
+      - 'Cargo.toml'
+      - 'Dockerfile'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      CLEAN_BUILD:
+        description: 'Perform a clean build. Use it only if really needed'
+        required: false
+        type: boolean
+        default: false
+      FORCE_RUN:
+        description: 'Force run this workflow'
+        required: false
+        type: boolean
+        default: false
+      AWS_REGION:
+        description: 'AWS region to push the docker image'
+        required: false
+        type: string
+        options:
+          - 'us-west-2'
+          - 'us-east-1'
+        default: 'us-west-2'
+
+jobs:
+  validate_build:
+    uses: tresleai/tresleai-utils-common/.github/workflows/reusable_validate-build.yaml@develop
+    with:
+      paths: '["src/**", "submodules/**", "Cargo.lock", "Cargo.toml", "Dockerfile"]'
+
+  build:
+    needs: validate_build
+    uses: tresleai/tresleai-utils-common/.github/workflows/reusable_build-and-push-docker.yaml@develop
+    with:
+      CLEAN_BUILD: ${{ github.event.inputs.CLEAN_BUILD || 'false' }}
+      FORCE_RUN: ${{ github.event.inputs.FORCE_RUN || 'false' }}
+      SHOULD_SKIP: ${{ needs.validate_build.outputs.should_skip || 'false'}}
+      AWS_REGION: ${{ github.event.inputs.AWS_REGION || 'us-west-2' }}
+    secrets:
+      TRESLEAI_GITHUB_TOKEN: ${{ secrets.TRESLEAI_GITHUB_TOKEN }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

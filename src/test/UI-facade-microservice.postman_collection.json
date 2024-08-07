@@ -1,0 +1,595 @@
+{
+	"info": {
+		"_postman_id": "85be4ccb-7f51-4c2b-9e76-5dc38fa9b8f4",
+		"name": "UI-facade (onboarding) microservice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32400070"
+	},
+	"item": [
+		{
+			"name": "Onboarding/ Update Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"app_name\": \"app_506\",\n    \"app_description\": \"App description updated 4\",\n    \"allowed_models\": [ \n        {\n            \"name\": \"haiku\",\n            \"description\": \"model1 description\",\n            \"model_type\": \"LLM\",\n            \"model_id\": \"anthropic.claude-3-haiku-20240307-v1:0\"\n        },\n        {\n            \"name\": \"sonnet\",\n            \"description\": \"model2 description\",\n            \"model_type\": \"LLM\",\n            \"model_id\": \"anthropic.claude-3-sonnet-20240229-v1:0\"\n        },\n        {\n            \"name\": \"gpt\",\n            \"description\": \"openai-api\",\n            \"model_type\": \"LLM\",\n            \"model_id\": \"gpt-4-0125-preview\",\n            \"secret_name\": \"openai-api-key\" \n        }    \n    ],\n    \"app_datasource\": {\n        \"filestore\": {\n            \"s3\": [\n                {\n                    \"url\": \"s3://tresleai-test-s3/steps-forward-steps-forward-daily-patient-payments.docx\",\n                    \"hints\": [\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/steps-forward-steps-forward-daily-patient-payments-hint-1\",\n                            \"descriptions\": \"xxx\"\n                        },\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/steps-forward-steps-forward-daily-patient-payments-2\",\n                            \"descriptions\": \"yyy\"\n                        }\n                    ]\n                },\n                {\n                    \"url\": \"s3://stg-tresleai-s3/*\",\n                    \"hints\": [\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/steps-forward-steps-forward-daily-patient-payments-hint-1\",\n                            \"descriptions\": \"xxx\"\n                        },\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/steps-forward-steps-forward-daily-patient-payments-2\",\n                            \"descriptions\": \"yyy\"\n                        }\n                    ]\n                },\n                {\n                    \"url\": \"s3://tresleai-test-s3/ravidata/*\",\n                    \"hints\": [\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/steps-forward-steps-forward-daily-patient-payments-hint-1\",\n                            \"descriptions\": \"xxx\"\n                        },\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/steps-forward-steps-forward-daily-patient-payments-2\",\n                            \"descriptions\": \"yyy\"\n                        }\n                    ]\n                },\n                {\n                    \"url\": \"s3://tresleai-test-s3/test space/config space.pdf\",\n                    \"hints\": [\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/steps-forward-steps-forward-daily-patient-payments-hint-1\",\n                            \"descriptions\": \"xxx\"\n                        },\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/steps-forward-steps-forward-daily-patient-payments-2\",\n                            \"descriptions\": \"yyy\"\n                        }\n                    ]\n                },\n                {\n                    \"url\": \"s3://stg-tresleai-s3/stg/validation042424/1900_HIG.pdf\",\n                    \"hints\": [\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/steps-forward-steps-forward-daily-patient-payments-hint-1\",\n                            \"descriptions\": \"xxx\"\n                        },\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/steps-forward-steps-forward-daily-patient-payments-2\",\n                            \"descriptions\": \"yyy\"\n                        }\n                    ]\n                }\n            ]\n        },\n        \"datastore\" : {\n            \"rds_mysql\": [\n                {\n                    \"host\": \"tresleai-db.c3o0qama8spy.us-west-2.rds.amazonaws.com\",\n                    \"port\": \"3306\",\n                    \"username\": \"admin\",\n                    \"secret_name\": \"rds!db-747087fa-d924-42cf-a2f5-a8f5aac181bf\",\n                    \"database\": \"tresleai_db\",\n                    \"db_type\": \"mysql\",\n                    \"descriptions\": \"\",\n                    \"tables\": [\n                        {\n                            \"name\": \"VenipunctureLabTests\",\n                            \"descriptions\": \"\",\n                            \"schema\": \"schema1\",\n                            \"columns\": [\n                                {\n                                    \"name\": \"column1\",\n                                    \"descriptions\": \"\"\n                                },\n                                {\n                                    \"name\": \"column2\",\n                                    \"descriptions\": \"\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            ],\n            \"rds_postgres\": [\n                {\n                    \"host\": \"tresleai-postgres.c3o0qama8spy.us-west-2.rds.amazonaws.com\",\n                    \"port\": \"5432\",\n                    \"username\": \"postgres\",\n                    \"secret_name\": \"rds!db-6ff2b633-a8c2-4363-8393-c3fa7df11b5c\",\n                    \"database\": \"postgres\",\n                    \"db_type\": \"postgres\",\n                    \"descriptions\": \"All postgres tables\",\n                    \"tables\": [\n                        {\n                            \"name\": \"medicaldeviceproductcatalog\",\n                            \"descriptions\": \"Catalog for medical devices\",\n                            \"schema\": \"schema1\",\n                            \"columns\": [\n                                {\n                                    \"name\": \"product_id\",\n                                    \"descriptions\": \"Id of the product\"\n                                },\n                                {\n                                    \"name\": \"product_name\",\n                                    \"descriptions\": \"Name of the product\"\n                                },\n                                {\n                                    \"name\": \"category\",\n                                    \"descriptions\": \"Category of the product\"\n                                },\n                                {\n                                    \"name\": \"description\",\n                                    \"descriptions\": \"Description of the product\"\n                                }\n                            ]\n                        },\n                        {\n                            \"name\": \"medicaldeviceproductpricing\",\n                            \"descriptions\": \"Pricing for medical devices\",\n                            \"schema\": \"schema1\",\n                            \"columns\": [\n                                {\n                                    \"name\": \"pricing_id\",\n                                    \"descriptions\": \"\"\n                                },\n                                {\n                                    \"name\": \"product_name\",\n                                    \"descriptions\": \"\"\n                                },\n                                {\n                                    \"name\": \"price\",\n                                    \"descriptions\": \"\"\n                                },\n                                {\n                                    \"name\": \"currency\",\n                                    \"descriptions\": \"\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1.1/admin/apps/onboard?is_update=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1.1",
+						"admin",
+						"apps",
+						"onboard"
+					],
+					"query": [
+						{
+							"key": "is_update",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieval Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "29QGmAf0bO1I8v0aJ6miO4onqbhI2FDQ9dQLFQL2",
+						"uuid": "45e6c0c5-4b71-4e51-9a29-544e835347a1"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"user_details\": {\n    \"user_id\":\"dinesh.shanmugasundaram@orcaholding.ai\",\n    \"access_details\": {\n      \"iam_policy_details\": [\n        {\n          \"policy_name\": \"AdministratorAccess\",\n          \"policy_arn\": \"arn:aws:iam::aws:policy/AdministratorAccess\"\n        },\n        {\n          \"policy_name\": \"AmazonEC2ContainerRegistryFullAccess\",\n          \"policy_arn\": \"arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess\"\n        },\n        {\n          \"policy_name\": \"AmazonEC2FullAccess\",\n          \"policy_arn\": \"arn:aws:iam::aws:policy/AmazonEC2FullAccess\"\n        },\n        {\n          \"policy_name\": \"AmazonEKSClusterPolicy\",\n          \"policy_arn\": \"arn:aws:iam::aws:policy/AmazonEKSClusterPolicy\"\n        }\n      ]\n    }\n  },\n  \"query\": \"test query\",\n  \"additional_prompt\": \"test prompt\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1.0/retrieval/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1.0",
+						"retrieval",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "History Retrieval Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "kBIVfChiUI538DEvVNTOH3swOHQ1Q37C3ioonkgz",
+						"uuid": "056ec7f7-9b1f-4dea-bf5f-0654e0010a01"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1.0/history/retrieval/?reference_id=be4dacbd-4ed2-46ae-b84d-33938684a1bc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1.0",
+						"history",
+						"retrieval",
+						""
+					],
+					"query": [
+						{
+							"key": "reference_id",
+							"value": "be4dacbd-4ed2-46ae-b84d-33938684a1bc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get app list",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1.1/admin/apps",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1.1",
+						"admin",
+						"apps"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get app",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1.1/admin/apps/app100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1.1",
+						"admin",
+						"apps",
+						"app100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete app",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1.1/admin/apps/testin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1.1",
+						"admin",
+						"apps",
+						"testin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update search_enabled flag",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1.1/admin/search/apps/app100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1.1",
+						"admin",
+						"search",
+						"apps",
+						"app100"
+					],
+					"query": [
+						{
+							"key": "search_enabled",
+							"value": "true",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get overview of apps/calls (last 6 mnths)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1.1/admin/overview/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1.1",
+						"admin",
+						"overview",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Metric calls",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1.1/admin/metric/calls?app_name=app_123&start_timestamp=2024-04-05T00%3A00%3A00Z&end_timestamp=2024-04-30T23%3A59%3A59Z",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1.1",
+						"admin",
+						"metric",
+						"calls"
+					],
+					"query": [
+						{
+							"key": "app_name",
+							"value": "app_123"
+						},
+						{
+							"key": "start_timestamp",
+							"value": "2024-04-05T00%3A00%3A00Z"
+						},
+						{
+							"key": "end_timestamp",
+							"value": "2024-04-30T23%3A59%3A59Z"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Metric Errors",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1.1/admin/metric/logs?app_name=app_200&start_timestamp=2024-04-02T23%3A59%3A59Z&end_timestamp=2024-04-30T23%3A59%3A59Z",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1.1",
+						"admin",
+						"metric",
+						"logs"
+					],
+					"query": [
+						{
+							"key": "app_name",
+							"value": "app_200"
+						},
+						{
+							"key": "start_timestamp",
+							"value": "2024-04-02T23%3A59%3A59Z"
+						},
+						{
+							"key": "end_timestamp",
+							"value": "2024-04-30T23%3A59%3A59Z"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieval Request - Cloud/ Kub",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "kBIVfChiUI538DEvVNTOH3swOHQ1Q37C3ioonkgz",
+						"type": "text",
+						"uuid": "a09521d1-e0e3-4473-89ba-6dd997540523"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"user_details\": {\n    \"user_id\":\"dinesh.shanmugasundaram@orcaholding.ai\",\n    \"access_details\": {\n      \"iam_policy_details\": [\n        {\n          \"policy_name\": \"AdministratorAccess\",\n          \"policy_arn\": \"arn:aws:iam::aws:policy/AdministratorAccess\"\n        },\n        {\n          \"policy_name\": \"AmazonEC2ContainerRegistryFullAccess\",\n          \"policy_arn\": \"arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess\"\n        },\n        {\n          \"policy_name\": \"AmazonEC2FullAccess\",\n          \"policy_arn\": \"arn:aws:iam::aws:policy/AmazonEC2FullAccess\"\n        },\n        {\n          \"policy_name\": \"AmazonEKSClusterPolicy\",\n          \"policy_arn\": \"arn:aws:iam::aws:policy/AmazonEKSClusterPolicy\"\n        }\n      ]\n    }\n  },\n  \"query\": \"test query\",\n  \"additional_prompt\": \"test prompt\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://facade-service.dev.tresle.ai/retrieval/",
+					"protocol": "https",
+					"host": [
+						"facade-service",
+						"dev",
+						"tresle",
+						"ai"
+					],
+					"path": [
+						"retrieval",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Onboarding Request - Cloud/ Kub",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"app_name\": \"app_119\",\n    \"app_description\": \"Description of the application\",\n    \"personas\": [\n        \"Researcher\",\n        \"DataScientist\",\n        \"Manager\"\n    ],\n    \"app_sector\": \"Marketing\",\n    \"app_user\": {\n        \"name\": \"user Name\",\n        \"email\": \"user@example.com\"\n    },\n    \"allowed_models\": [ \n        {\n            \"name\": \"haiku\",\n            \"description\": \"model1 description\",\n            \"model_type\": \"LLM\",\n            \"model_id\": \"anthropic.claude-3-haiku-20240307-v1:0\"\n        },\n        {\n            \"name\": \"sonnet\",\n            \"description\": \"model2 description\",\n            \"model_type\": \"LLM\",\n            \"model_id\": \"anthropic.claude-3-sonnet-20240229-v1:0\"\n        },\n        {\n            \"name\": \"gpt\",\n            \"description\": \"openai-api\",\n            \"model_type\": \"LLM\",\n            \"model_id\": \"gpt-4-0125-preview\",\n            \"secret_name\": \"openai-api-key\" \n        }    \n    ],\n    \"app_datasource\": {\n        \"filestore\": {\n            \"s3\": [\n                {\n                    \"url\": \"s3://tresleai-test-s3/2020-Laboratory-Procedures-508.pdf\",\n                    \"hints\": [\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/2020-Laboratory-Procedures-508-hint-1\",\n                            \"descriptions\": \"xxx\"\n                        },\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/2020-Laboratory-Procedures-508-hint-2\",\n                            \"descriptions\": \"yyy\"\n                        }\n                    ]\n                },\n                {\n                    \"url\": \"s3://tresleai-test-s3/2021-Laboratory-Procedures-508.pdf\",\n                    \"hints\": [\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/2021-Laboratory-Procedures-508-hint-1\",\n                            \"descriptions\": \"xxx\"\n                        },\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/2021-Laboratory-Procedures-508-hint-2\",\n                            \"descriptions\": \"yyy\"\n                        }\n                    ]\n                },\n                {\n                    \"url\": \"s3://tresleai-test-s3/*.pdf\",\n                    \"hints\": [\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/*.pdf-hint-1\",\n                            \"descriptions\": \"xxx\"\n                        },\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/*.pdf-hint-2\",\n                            \"descriptions\": \"yyy\"\n                        }\n                    ]\n                },\n                {\n                    \"url\": \"s3://tresleai-test-s3/*\",\n                    \"hints\": [\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/*-hint-1\",\n                            \"descriptions\": \"xxx\"\n                        },\n                        {\n                            \"prefix\": \"s3://tresleai-test-s3/*-hint-2\",\n                            \"descriptions\": \"yyy\"\n                        }\n                    ]\n                }\n            ]\n        },\n        \"datastore\" : {\n            \"rds_mysql\": [\n                {\n                    \"host\": \"tresleai-db.c3o0qama8spy.us-west-2.rds.amazonaws.com\",\n                    \"port\": \"3306\",\n                    \"username\": \"admin\",\n                    \"secret_name\": \"rds!db-747087fa-d924-42cf-a2f5-a8f5aac181bf\",\n                    \"database\": \"tresleai_db\",\n                    \"db_type\": \"mysql\",\n                    \"descriptions\": \"\",\n                    \"tables\": [\n                        {\n                            \"name\": \"VenipunctureLabTests\",\n                            \"descriptions\": \"\",\n                            \"schema\": \"schema1\",\n                            \"columns\": [\n                                {\n                                    \"name\": \"column1\",\n                                    \"descriptions\": \"\"\n                                },\n                                {\n                                    \"name\": \"column2\",\n                                    \"descriptions\": \"\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            ],\n            \"rds_postgres\": [\n                {\n                    \"host\": \"tresleai-postgres.c3o0qama8spy.us-west-2.rds.amazonaws.com\",\n                    \"port\": \"5432\",\n                    \"username\": \"postgres\",\n                    \"secret_name\": \"dev/tresleai/postgres/postgres\",\n                    \"database\": \"postgres\",\n                    \"db_type\": \"postgres\",\n                    \"descriptions\": \"All postgres tables\",\n                    \"tables\": [\n                        {\n                            \"name\": \"medicaldeviceproductcatalog\",\n                            \"descriptions\": \"Catalog for medical devices\",\n                            \"schema\": \"schema1\",\n                            \"columns\": [\n                                {\n                                    \"name\": \"product_id\",\n                                    \"descriptions\": \"Id of the product\"\n                                },\n                                {\n                                    \"name\": \"product_name\",\n                                    \"descriptions\": \"Name of the product\"\n                                },\n                                {\n                                    \"name\": \"category\",\n                                    \"descriptions\": \"Category of the product\"\n                                },\n                                {\n                                    \"name\": \"description\",\n                                    \"descriptions\": \"Description of the product\"\n                                }\n                            ]\n                        },\n                        {\n                            \"name\": \"medicaldeviceproductpricing\",\n                            \"descriptions\": \"Pricing for medical devices\",\n                            \"schema\": \"schema1\",\n                            \"columns\": [\n                                {\n                                    \"name\": \"pricing_id\",\n                                    \"descriptions\": \"\"\n                                },\n                                {\n                                    \"name\": \"product_name\",\n                                    \"descriptions\": \"\"\n                                },\n                                {\n                                    \"name\": \"price\",\n                                    \"descriptions\": \"\"\n                                },\n                                {\n                                    \"name\": \"currency\",\n                                    \"descriptions\": \"\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://facade-service.dev.tresle.ai/apponboard/",
+					"protocol": "https",
+					"host": [
+						"facade-service",
+						"dev",
+						"tresle",
+						"ai"
+					],
+					"path": [
+						"apponboard",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

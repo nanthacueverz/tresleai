@@ -1,0 +1,166 @@
+{
+	"filestore": {
+		"s3": [
+			{
+				"url": "s3://tresleai-dev-unittest/2021-Laboratory-Procedures-508.pdf",
+				"hints": [
+					{
+						"prefix": "s3://tresleai-dev-unittest/2021-Laboratory-Procedures-508-hint-1",
+						"descriptions": "xxx"
+					},
+					{
+						"prefix": "s3://tresleai-dev-unittest/2021-Laboratory-Procedures-508-hint-2",
+						"descriptions": "yyy"
+					}
+				]
+			},
+			{
+				"url": "s3://tresleai-dev-unittest/*.pdf",
+				"hints": [
+					{
+						"prefix": "s3://tresleai-dev-unittest/*.pdf-hint-1",
+						"descriptions": "xxx"
+					},
+					{
+						"prefix": "s3://tresleai-dev-unittest/*.pdf-hint-2",
+						"descriptions": "yyy"
+					}
+				]
+			},
+			{
+				"url": "s3://tresleai-dev-unittest/*",
+				"hints": [
+					{
+						"prefix": "s3://tresleai-dev-unittest/*-hint-1",
+						"descriptions": "xxx"
+					},
+					{
+						"prefix": "s3://tresleai-dev-unittest/*-hint-2",
+						"descriptions": "yyy"
+					}
+				]
+			}
+		]
+	},
+	"datastore": {
+		"rds_mysql": [
+			{
+				"host": "tresleai-db.c3o0qama8spy.us-west-2.rds.amazonaws.com",
+				"port": "3306",
+				"username": "admin",
+				"secret_name": "rds!db-747087fa-d924-42cf-a2f5-a8f5aac181bf",
+				"database": "tresleai_db",
+				"db_type": "mysql",
+				"descriptions": "",
+				"tables": [
+					{
+						"name": "SupplyChain",
+						"descriptions": "",
+						"schema": "schema1",
+						"columns": [
+							{
+								"name": "ID",
+								"descriptions": ""
+							},
+							{
+								"name": "ProductID",
+								"descriptions": ""
+							}
+						]
+					}
+				]
+			}
+		],
+		"opensearch": [
+			{
+				"host": "localhost",
+				"port": "9200",
+				"database": "ecommerce",
+				"db_type": "opensearch",
+				"secret_name": "opensearch_localhost_test_login",
+				"aws_service_name": "es",
+				"tables": [
+					{
+							"name": "ecommerce",
+							"descriptions": "Table_Description",
+							"schema_json": {
+								"category": "array of strings, Product categories, examples: ['Men's Clothing']",
+								"currency": "string, Currency of the order, examples: 'EUR'",
+								"customer_first_name": "string, First name of the customer, examples: 'Eddie'",
+								"customer_full_name": "string, Full name of the customer, examples: 'Eddie Underwood'",
+								"customer_gender": "string, Gender of the customer, examples: 'MALE', 'FEMALE'",
+								"customer_id": "integer, ID of the customer, examples: 38",
+								"customer_last_name": "string, Last name of the customer, examples: 'Underwood'",
+								"customer_phone": "string, Phone number of the customer, examples: ''",
+								"day_of_week": "string, Day of the week the order was placed, examples: 'Monday'",
+								"day_of_week_i": "integer, Day of the week as an integer, examples: 0",
+								"email": "string, Email of the customer, examples: 'eddie@underwood-family.zzz'",
+								"manufacturer": "array of strings, Manufacturers of the products, examples: ['Elitelligence', 'Oceanavigations']",
+								"order_date": "date, Date and time of the order, examples: '2016-12-26T09:28:48+00:00'",
+								"order_id": "integer, ID of the order, examples: 584677",
+								"products": [
+									{
+										"base_price": "float, Base price of the product, examples: 11.99",
+										"discount_percentage": "float, Discount percentage applied, examples: 0",
+										"quantity": "integer, Quantity of the product ordered, examples: 1",
+										"manufacturer": "string, Manufacturer of the product, examples: 'Elitelligence'",
+										"tax_amount": "float, Tax amount for the product, examples: 0",
+										"product_id": "integer, ID of the product, examples: 6283",
+										"category": "string, Category of the product, examples: 'Men's Clothing'",
+										"sku": "string, Stock keeping unit, examples: 'ZO0549605496'",
+										"taxless_price": "float, Price without tax, examples: 11.99",
+										"unit_discount_amount": "float, Discount amount per unit, examples: 0",
+										"min_price": "float, Minimum price, examples: 6.35",
+										"_id": "string, Unique ID of the sold product, examples: 'sold_product_584677_6283'",
+										"discount_amount": "float, Discount amount, examples: 0",
+										"created_on": "date, Creation date and time, examples: '2016-12-26T09:28:48+00:00'",
+										"product_name": "string, Name of the product, examples: 'Basic T-shirt - dark blue/white'",
+										"price": "float, Price of the product, examples: 11.99",
+										"taxful_price": "float, Price including tax, examples: 11.99",
+										"base_unit_price": "float, Base unit price, examples: 11.99"
+									}
+								],
+								"sku": "array of strings, Stock keeping units of the products, examples: ['ZO0549605496', 'ZO0299602996']",
+								"taxful_total_price": "float, Total price including tax, examples: 36.98",
+								"taxless_total_price": "float, Total price excluding tax, examples: 36.98",
+								"total_quantity": "integer, Total quantity of products, examples: 2",
+								"total_unique_products": "integer, Total unique products, examples: 2",
+								"type": "string, Type of document, examples: 'order'",
+								"user": "string, User who placed the order, examples: 'eddie'",
+								"geoip": {
+									"country_iso_code": "string, Country ISO code, examples: 'EG'",
+									"location": {
+										"lon": "float, Longitude of the location, examples: 31.3",
+										"lat": "float, Latitude of the location, examples: 30.1"
+									},
+									"region_name": "string, Name of the region, examples: 'Cairo Governorate'",
+									"continent_name": "string, Name of the continent, examples: 'Africa'",
+									"city_name": "string, Name of the city, examples: 'Cairo'"
+								},
+								"event": {
+									"dataset": "string, Dataset name, examples: 'sample_ecommerce'"
+								}
+						}
+					}
+				]
+			},
+			{
+				"host": "localhost",
+				"port": "9200",
+				"database": "ecommerce",
+				"db_type": "opensearch",
+				"secret_name": "opensearch_localhost_test_login",
+				"aws_service_name": "es",
+				"tables": [
+					{
+						"name": "ecommerce",
+						"descriptions": "Table_Description",
+						"schema_json": {
+							"category": "array of strings, Product categories"
+						}
+					}
+				]
+			}
+		]
+	}
+}

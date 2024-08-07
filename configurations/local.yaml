@@ -1,0 +1,65 @@
+application:
+  name: tresle-facade-service
+  address: 0.0.0.0
+  port: 8000
+  cors:
+    enabled: true
+    allowed_methods: ["GET", "POST", "PATCH", "DELETE"]
+    allowed_headers: ["AUTHORIZATION", "ACCEPT","CONTENT-TYPE", "X-API-KEY"]
+    allow_credentials: true
+  timestamp_format: "%Y-%m-%d %H:%M:%S"
+aws_s3:
+  max_concurrent_requests: 50
+aws_iam:
+  region: us-east-1
+aws_api_gateway:
+  region: us-west-2
+  usage_plan_id: bqpvmk
+  usage_plan_key_type: API_KEY
+kafka_client:
+  group_id: FacadeProducerGroup
+  onboarding_topic: apponboard
+  deletion_topic: appdelete
+  kafka_enable_partition_eof: "false"
+  kafka_auto_offset_reset: earliest
+kubernetes:
+  namespace: kubernetes-dashboard
+  secret_name: admin-user
+aws:
+  access_key_id: 
+  secret_access_key:
+  default_region: us-west-2
+onboard_inprogress_status: "In Progress"
+onboard_complete_status: "Completed"
+sqs_key_value: "default_value"
+retrieval_progress_msg: "Retrieval in progress."
+app_generated_config:
+  knowledge_graph_config:
+    vectordb_config:
+      text_collection_name_prefix: "text"
+      multimodal_collection_name_prefix: "multimodal"
+      general_collection_name_prefix: "general"
+      session_history_collection_name_prefix: "session"
+      error_collection_name_prefix: "error"
+      insight_collection_name_prefix: "insight"
+      retention: "86400"
+      s3_storage_prefix: "knowledge-extraction"
+    parser_config:
+      s3_storage_prefix: "parsed-files"
+    logging:
+      collection: "logs"
+      retention: "86400"
+      s3_prefix: "logs"
+    audit:
+      collection: "audit"
+      retention: "86400"
+      s3_prefix: "audit"
+    metric:
+      collection: "metric"
+      retention: "86400"
+      s3_prefix: "metrics"
+datastore:
+  connection_timeout_seconds: "5"
+  max_concurrent_requests: 50
+disclaimer_text: "Generative AI technology is innovating constantly. We are doing our best to make sure the underlying models are grounded with only your data. But the model does use its inherent learnings to answer and decipher from the data provided. Underlying models and our platform are constantly evolving to make the answers more accurate."
+tracing_layer_debug_mode: true

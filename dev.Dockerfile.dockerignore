@@ -1,0 +1,9 @@
+target
+**/target
+.github
+*.log
+docker-compose.yml
+tests
+.gitignore
+.global.yaml
+.local.yaml

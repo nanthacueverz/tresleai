@@ -1,0 +1,172 @@
+{
+    "app_name": "app_1",
+    "app_description": "Description of the application",
+    "allowed_models": [ 
+        {
+            "name": "haiku",
+            "description": "model1 description",
+            "model_type": "LLM",
+            "model_id": "anthropic.claude-3-haiku-20240307-v1:0"
+        },
+        {
+            "name": "sonnet",
+            "description": "model2 description",
+            "model_type": "LLM",
+            "model_id": "anthropic.claude-3-sonnet-20240229-v1:0"
+        },
+        {
+            "name": "gpt",
+            "description": "openai-api",
+            "model_type": "LLM",
+            "model_id": "gpt-4-0125-preview",
+            "secret_name": "openai-api-key" 
+        }    
+    ],
+    "app_datasource": {
+        "filestore": {
+            "s3": [
+                {
+                    "url": "s3://tresleai-test-s3/2020-Laboratory-Procedures-508.pdf",
+                    "hints": [
+                        {
+                            "prefix": "s3://tresleai-test-s3/2020-Laboratory-Procedures-508-hint-1",
+                            "descriptions": "xxx"
+                        },
+                        {
+                            "prefix": "s3://tresleai-test-s3/2020-Laboratory-Procedures-508-hint-2",
+                            "descriptions": "yyy"
+                        }
+                    ]
+                },
+                {
+                    "url": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508.pdf",
+                    "hints": [
+                        {
+                            "prefix": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508-hint-1",
+                            "descriptions": "xxx"
+                        },
+                        {
+                            "prefix": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508-hint-2",
+                            "descriptions": "yyy"
+                        }
+                    ]
+                },
+                {
+                    "url": "s3://tresleai-test-s3/*.pdf",
+                    "hints": [
+                        {
+                            "prefix": "s3://tresleai-test-s3/*.pdf-hint-1",
+                            "descriptions": "xxx"
+                        },
+                        {
+                            "prefix": "s3://tresleai-test-s3/*.pdf-hint-2",
+                            "descriptions": "yyy"
+                        }
+                    ]
+                },
+                {
+                    "url": "s3://tresleai-test-s3/*",
+                    "hints": [
+                        {
+                            "prefix": "s3://tresleai-test-s3/*-hint-1",
+                            "descriptions": "xxx"
+                        },
+                        {
+                            "prefix": "s3://tresleai-test-s3/*-hint-2",
+                            "descriptions": "yyy"
+                        }
+                    ]
+                }
+            ]
+        },
+        "datastore" : {
+            "rds_mysql": [
+                {
+                    "host": "tresleai-db.c3o0qama8spy.us-west-2.rds.amazonaws.com",
+                    "port": "3306",
+                    "username": "admin",
+                    "secret_name": "rds!db-747087fa-d924-42cf-a2f5-a8f5aac181bf",
+                    "database": "tresleai_db",
+                    "db_type": "mysql",
+                    "descriptions": "",
+                    "tables": [
+                        {
+                            "name": "VenipunctureLabTests",
+                            "descriptions": "",
+                            "schema": "schema1",
+                            "columns": [
+                                {
+                                    "name": "column1",
+                                    "descriptions": ""
+                                },
+                                {
+                                    "name": "column2",
+                                    "descriptions": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "rds_postgres": [
+                {
+                    "host": "tresleai-postgres.c3o0qama8spy.us-west-2.rds.amazonaws.com",
+                    "port": "5432",
+                    "username": "postgres",
+                    "secret_name": "dev/tresleai/postgres/postgres",
+                    "database": "postgres",
+                    "db_type": "postgres",
+                    "descriptions": "All postgres tables",
+                    "tables": [
+                        {
+                            "name": "medicaldeviceproductcatalog",
+                            "descriptions": "Catalog for medical devices",
+                            "schema": "schema1",
+                            "columns": [
+                                {
+                                    "name": "product_id",
+                                    "descriptions": "Id of the product"
+                                },
+                                {
+                                    "name": "product_name",
+                                    "descriptions": "Name of the product"
+                                },
+                                {
+                                    "name": "category",
+                                    "descriptions": "Category of the product"
+                                },
+                                {
+                                    "name": "description",
+                                    "descriptions": "Description of the product"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "medicaldeviceproductpricing",
+                            "descriptions": "Pricing for medical devices",
+                            "schema": "schema1",
+                            "columns": [
+                                {
+                                    "name": "pricing_id",
+                                    "descriptions": ""
+                                },
+                                {
+                                    "name": "product_name",
+                                    "descriptions": ""
+                                },
+                                {
+                                    "name": "price",
+                                    "descriptions": ""
+                                },
+                                {
+                                    "name": "currency",
+                                    "descriptions": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

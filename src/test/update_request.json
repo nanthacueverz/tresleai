@@ -1,0 +1,104 @@
+{
+  "app_name": "app1",
+  "app_description": "Description of this app has been updated.",
+  "csv_append_same_schema": false,
+  "text_embedding_model": {
+    "model_id": "amazon.titan-embed-text-v2:0",
+    "platform": "bedrock",
+    "dimension": 1024
+  },
+  "multimodal_embedding_model": {
+    "model_id": "amazon.titan-embed-image-v1",
+    "platform": "bedrock",
+    "dimension": 1024
+  },
+  "allowed_models": [ 
+    {
+        "name": "haiku",
+        "description": "model1 description",
+        "model_type": "LLM",
+        "model_id": "anthropic.claude-3-haiku-20240307-v1:0"
+    },
+    {
+        "name": "sonnet",
+        "description": "model2 description",
+        "model_type": "LLM",
+        "model_id": "anthropic.claude-3-sonnet-20240229-v1:0"
+    }  
+  ],
+  "app_datasource": {
+    "filestore": {
+      "s3": [
+        {
+          "url": "s3://tresleai-test-s3/2020-Laboratory-Procedures-508.pdf",
+          "hints": [
+            {
+              "prefix": "s3://tresleai-test-s3/2020-Laboratory-Procedures-508-hint-1",
+              "descriptions": "xxx"
+            },
+            {
+              "prefix": "s3://tresleai-test-s3/2020-Laboratory-Procedures-508-hint-2",
+              "descriptions": "yyy"
+            }
+          ]
+        },
+        {
+          "url": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508.pdf",
+          "hints": [
+            {
+              "prefix": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508-hint-1",
+              "descriptions": "xxx"
+            },
+            {
+              "prefix": "s3://tresleai-test-s3/2021-Laboratory-Procedures-508-hint-2",
+              "descriptions": "yyy"
+            }
+          ]
+        },
+        {
+          "url": "s3://tresleai-test-s3/*",
+          "hints": [
+            {
+                "prefix": "s3://tresleai-test-s3/*-hint-1",
+                "descriptions": "xxx"
+            },
+            {
+                "prefix": "s3://tresleai-test-s3/*-hint-2",
+                "descriptions": "yyy"
+            }
+          ]
+        }
+      ]
+    },
+    "datastore": {
+      "rds_mysql": [
+        {
+          "host": "tresleai-db.c3o0qama8spy.us-west-2.rds.amazonaws.com",
+          "port": "3306",
+          "username": "admin",
+          "secret_name": "rds!db-747087fa-d924-42cf-a2f5-a8f5aac181bf",
+          "database": "tresleai_db",
+          "db_type": "mysql",
+          "descriptions": "",
+          "tables": [
+            {
+              "name": "VenipunctureLabTests",
+              "descriptions": "",
+              "schema": "schema1",
+              "columns": [
+                {
+                  "name": "column1",
+                  "descriptions": ""
+                },
+                {
+                  "name": "column2",
+                  "descriptions": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

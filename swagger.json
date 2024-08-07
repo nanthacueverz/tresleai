@@ -1,0 +1,1403 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tresleai Rest API ",
+    "description": "Tresleai Facade Microservice API",
+    "license": {
+      "name": ""
+    },
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1.0/history/retrieval": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to extract a specific document from an application's history collection, with an input 'reference_id' as the basis for retrieval.",
+        "description": "This API is designed to be used after initiating a retrieval process via the retrieval API. The retrieval API returns a 'reference_id' which is then used as the basis for retrieving the corresponding document from the history collection of an application within the database. The document contains the initiated query and its generated response, among other relevant details.\n\n#### API Key\n- The application's API key is required to authenticate the request.\n- This API key is created during the application onboarding process and is persisted in the API gateway of the concerned AWS account.\n- It must be included in the `x-api-key` header of the request to associate it with an application.\n\n#### Example\n\nConsider an application, named as \"test_app\", equipped with an API key \"a8VYYvaey38pajBi4jrMt8pGNdw5w0pn8oCytuQB\". This application has previously executed a retrieval operation, and obtained a reference ID \"14b1456d-2708-45bc-8989-eac2d2eba4db\" from the retrieval API.\nThe application can now extract the document associated with this specific reference ID from its history collection.\n\nTo accomplish this, a GET request would be made to the below endpoint, with the `reference_id` as a query parameter:\n\n```\nGET /api/v1.0/history/retrieval?reference_id=\"14b1456d-2708-45bc-8989-eac2d2eba4db\"\nx-api-key: a8VYYvaey38pajBi4jrMt8pGNdw5w0pn8oCytuQB\n```\n\nUpon successful retrieval of the document, the response would be returned as follows:\n\n```\n{\n\"status\": \"success\",\n\"message\": \"History document with reference ID: \"14b1456d-2708-45bc-8989-eac2d2eba4db\" retrieved successfully.\",\n\"app_name\": \"test_app\"\n\"data\": {\n\"_id\": {\n\"$oid\": \"\u003Cid of the document in DocumentDB\u003E\"\n},\n\"reference_id\": \"14b1456d-2708-45bc-8989-eac2d2eba4db\",\n\"task_id\": \"\u003Ctask_id\u003E\",\n\"query\": \"\u003Cquery\u003E\",\n\"response\": \"\u003Cresponse\u003E\",\n\"timestamp\": \"\u003Ctimestamp\u003E\"\n}\n}\n```\n\nPlease note that the document is created in the database only upon successful generation of the response.\nUntil this point, the document is in the 'processing' state, indicated by a 202 (ACCEPTED) status code,\nas demonstrated in the following example response (including a sample reference ID):\n\n```\n{\n\"message\": \"Retrieval in progress.\",\n\"reference_id\": \"0103f9a3-bbd7-40a6-9545-4122d63fa0a8\",\n\"error_code\": 202\n}\n```",
+        "operationId": "get_history_handler",
+        "parameters": [
+          {
+            "name": "reference_id",
+            "in": "query",
+            "description": "Reference id.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "History document retrieved successfully."
+          },
+          "202": {
+            "description": "Internal Error. Please contact tresleai support team. Use reference ID: "
+          },
+          "400": {
+            "description": "Internal Error. Please contact tresleai support team. Use reference ID: "
+          },
+          "404": {
+            "description": "Internal Error. Please contact tresleai support team. Use reference ID: "
+          },
+          "500": {
+            "description": "Internal Error. Please contact tresleai support team. Use reference ID: "
+          }
+        }
+      }
+    },
+    "/api/v1.0/retrieval": {
+      "post": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "POST handler to initiate the retrieval process for a response corresponding to a specific query.",
+        "description": "This API triggers a retrieval operation in the backend, which fetches data based on the user details and query provided in the request. The retrieval process involves validating user policies, and asynchronously initiating the response retrieval by passing on the query and user details to the engine.\n\nThe request comprises several important components:\n\n#### User Details\n- The 'user_details' field contains the user's information, inclusive of their ID and IAM policy particulars.\n- The 'access_details' field holds the details of the IAM policy and database policy.\n- The IAM policies tied to the user outline their permissions and access rights to resources in the AWS environment. These policies are validated before proceeding with retrieval, else the request is terminated.\n- The database policy details include the name of the database and table.\n- Each policy is linked with a unique name and ARN (Amazon Resource Name).\n- For instance, a policy might allow the user access to certain S3 buckets, or grant permissions to operate on other AWS resources. This would shape a tailored response based on the resources the user can access.\n\n#### Query and additional prompt\n- The 'query' field contains the query to initiate the retrieval.\n- For enhanced context, the 'additional_prompt' field can be utilized.\n\n#### API Key\n- The application's API key is required to authenticate the request.\n- This API key is created during the application onboarding process and is persisted in the API gateway of the concerned AWS account.\n- It must be included in the `x-api-key` header of the request to associate it with an application.\n\n#### Example\n\nConsider a user with ID \"sample_user@example.com\", with access granted through two policies: \"policy1\" (\"arn:aws:iam::aws:policy/policy1\"), and \"policy2\" (\"arn:aws:iam::aws:policy/policy2\"). The application's API key is \"a8VYYvaey38pajBi4jrMt8pGNdw5w0pn8oCytuQB\". The user wants to initiate a retrieval with the query \"provide a list of all accessible documents\" and an additional prompt \"related to policy1\".\n\nTo initiate retrieval, a POST request would be made to the below endpoint:\n\n```\nPOST /api/v1.0/retrieval\nx-api-key: a8VYYvaey38pajBi4jrMt8pGNdw5w0pn8oCytuQB\n```\n\nBelow is an example of how the request payload might look like:\n\n```\n{\n\"user_details\": {\n\"user_id\": \"sample_user@example.com\",\n\"access_details\": {\n\"iam_policy_details\": [\n{\n\"policy_name\": \"policy1\",\n\"policy_arn\": \"arn:aws:iam::aws:policy/policy1\"\n},\n{\n\"policy_name\": \"policy2\",\n\"policy_arn\": \"arn:aws:iam::aws:policy/policy2\"\n}\n]\n\"db_policy_details\": [\n{\n\"database_name\": \"database1\",\n\"table_name\": \"table1\"\n},\n{\n\"database_name\": \"database2\",\n\"table_name\": \"table2\"\n}\n]\n}\n},\n\"query\": \"provide a list of all accessible documents\",\n\"additional_prompt\": \"related to policy1\"\n}\n```\n\nUpon successful initiation, the response would be returned as follows:\n\n```\n{\n\"status\": \"success\",\n\"message\": \"Retrieval initiated successfully.\",\n\"reference_id\": \"14b1456d-2708-45bc-8989-eac2d2eba4db\"\n}\n```\n\nIn the above response, the returned reference ID is then used to call the history retrieval API to fetch the response document from the database. It can also be used to contact Tresle support team with any questions or concerns.",
+        "operationId": "post_retrieval_handler",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetrievalRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Retrieval in progress."
+          },
+          "400": {
+            "description": "Internal Error. Please contact tresleai support team. Use reference ID: "
+          },
+          "404": {
+            "description": "Internal Error. Please contact tresleai support team. Use reference ID: "
+          },
+          "500": {
+            "description": "Internal Error. Please contact tresleai support team. Use reference ID: "
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/apps": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to fetch the list of apps.",
+        "operationId": "get_app_list",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page number.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "nullable": true,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "page limit.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "nullable": true,
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "App List retrieved successfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/apps/onboard": {
+      "post": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "POST handler to onboard/update an application to the product/ platform.",
+        "operationId": "post_app_onboarding_handler",
+        "parameters": [
+          {
+            "name": "is_update",
+            "in": "query",
+            "description": "Onboarding or update request.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Onboarding/update initiated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AppCreateResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/apps/{app_name}": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to get an app.",
+        "operationId": "get_app",
+        "parameters": [
+          {
+            "name": "app_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "App retrieved succesfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "DELETE handler to delete an app and other associated resources.",
+        "operationId": "delete_app",
+        "parameters": [
+          {
+            "name": "app_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "App deleted succesfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/capture_tc": {
+      "post": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "post handler to capture the T & C and other user information from admin ui & reference ui.",
+        "operationId": "post_capture_tc_handler",
+        "parameters": [
+          {
+            "name": "is_tc",
+            "in": "query",
+            "description": "Check box for Accepting T & C.",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaptureUserSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Captured User and T&C information successfully"
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/logs": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to fetch the logging data for the app.",
+        "operationId": "get_logs",
+        "parameters": [
+          {
+            "name": "app_name",
+            "in": "query",
+            "description": "app name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "in": "query",
+            "description": "start timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "in": "query",
+            "description": "end timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logs calls retrieved successfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/metric/calls": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to fetch the number of metric calls made to the app.",
+        "operationId": "get_metric_calls",
+        "parameters": [
+          {
+            "name": "app_name",
+            "in": "query",
+            "description": "app name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "in": "query",
+            "description": "start timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "in": "query",
+            "description": "end timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get metric calls succesfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/metric/logs": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to fetch the number of errors made to the app.",
+        "operationId": "get_metric_errors",
+        "parameters": [
+          {
+            "name": "app_name",
+            "in": "query",
+            "description": "app name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "in": "query",
+            "description": "start timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "in": "query",
+            "description": "end timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "severity",
+            "in": "query",
+            "description": "severity level.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "count_only",
+            "in": "query",
+            "description": "severity count only.",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Metric errors fetched succesfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/nodes/chart/{app_name}": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to fetch the data for knowledge nodes for an app between two timestamps. The data is then displayed on a chart on admin UI.",
+        "operationId": "get_knowledge_nodes_chart_handler",
+        "parameters": [
+          {
+            "name": "utc_start_timestamp",
+            "in": "query",
+            "description": "UTC start timestamp.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "utc_end_timestamp",
+            "in": "query",
+            "description": "UTC end timestamp.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "app_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chart data for knowledge nodes for app fetched successfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/nodes/count/{app_name}": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to fetch count of knowledge nodes and errors while processing them for an app between two timestamps.",
+        "operationId": "get_knowledge_nodes_and_errors_count",
+        "parameters": [
+          {
+            "name": "start_timestamp",
+            "in": "query",
+            "description": "start timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "in": "query",
+            "description": "end timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "app_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Count of knowledge nodes and errors for app fetched successfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/nodes/errors/{app_name}": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to fetch errors while processing/extracting knowledge nodes for an app between two timestamps.",
+        "operationId": "get_knowledge_nodes_errors_handler",
+        "parameters": [
+          {
+            "name": "start_timestamp",
+            "in": "query",
+            "description": "start timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "in": "query",
+            "description": "end timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page number.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "nullable": true,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "page limit.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "nullable": true,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "app_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Errors while processing knowledge nodes for app fetched successfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/nodes/{app_name}": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to fetch knowledge nodes for an app between two timestamps.",
+        "operationId": "get_knowledge_nodes_handler",
+        "parameters": [
+          {
+            "name": "start_timestamp",
+            "in": "query",
+            "description": "start timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "in": "query",
+            "description": "end timestamp.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "knowledge_node_type",
+            "in": "query",
+            "description": "knowledge node type.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page number.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "nullable": true,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "page limit.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "nullable": true,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "app_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Knowledge nodes for app fetched successfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/overview": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to fetch the overview of calls made from different apps during the last 6 months.",
+        "operationId": "get_apps_and_calls_overview_handler",
+        "responses": {
+          "200": {
+            "description": "Overview of apps and calls fetched successfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/search/apps/{app_name}": {
+      "patch": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "PATCH handler to update the search_enabled flag of an app.",
+        "operationId": "update_search_enabled_handler",
+        "parameters": [
+          {
+            "name": "search_enabled",
+            "in": "query",
+            "description": "search enabled flag.",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          },
+          {
+            "name": "app_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search_enabled flag updated successfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    },
+    "/api/v1.1/admin/token": {
+      "get": {
+        "tags": [
+          "crate"
+        ],
+        "summary": "GET handler to generate a token to login into kubernetes dashboard.",
+        "operationId": "get_kubernetes_token",
+        "responses": {
+          "200": {
+            "description": "Token generated succesfully."
+          },
+          "400": {
+            "description": "Invalid Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tresle error occurred. Please save reference id: {} and contact support."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccessDetails": {
+        "type": "object",
+        "properties": {
+          "db_policy_details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DbPolicyDetails"
+            },
+            "nullable": true
+          },
+          "iam_policy_details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IAMPolicyDetails"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "AppCreateResponse": {
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "api_key",
+          "app_id",
+          "reference_id"
+        ],
+        "properties": {
+          "api_key": {
+            "type": "string"
+          },
+          "app_id": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "reference_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "AppDataSource": {
+        "type": "object",
+        "required": [
+          "filestore",
+          "datastore"
+        ],
+        "properties": {
+          "datastore": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DataStore"
+              }
+            }
+          },
+          "filestore": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/FileStore"
+              }
+            }
+          }
+        }
+      },
+      "CaptureUserSchema": {
+        "type": "object",
+        "required": [
+          "user_name",
+          "ui_type"
+        ],
+        "properties": {
+          "ui_type": {
+            "type": "string"
+          },
+          "user_name": {
+            "type": "string"
+          }
+        }
+      },
+      "Column": {
+        "type": "object",
+        "required": [
+          "name",
+          "descriptions"
+        ],
+        "properties": {
+          "descriptions": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "DataStore": {
+        "type": "object",
+        "required": [
+          "host",
+          "port",
+          "database",
+          "db_type",
+          "tables"
+        ],
+        "properties": {
+          "database": {
+            "type": "string"
+          },
+          "db_type": {
+            "type": "string"
+          },
+          "descriptions": {
+            "type": "string",
+            "nullable": true
+          },
+          "fact_phrases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "fact_words": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "host": {
+            "type": "string"
+          },
+          "port": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string",
+            "nullable": true
+          },
+          "search_keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "secret_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          },
+          "tables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Table"
+            }
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DbPolicyDetails": {
+        "type": "object",
+        "required": [
+          "database_name",
+          "table_name"
+        ],
+        "properties": {
+          "database_name": {
+            "type": "string"
+          },
+          "table_name": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "errors"
+        ],
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "FileStore": {
+        "type": "object",
+        "required": [
+          "url",
+          "hints"
+        ],
+        "properties": {
+          "hints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Hint"
+            }
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "Hint": {
+        "type": "object",
+        "required": [
+          "prefix",
+          "descriptions"
+        ],
+        "properties": {
+          "descriptions": {
+            "type": "string"
+          },
+          "prefix": {
+            "type": "string"
+          }
+        }
+      },
+      "HistoryDocument": {
+        "type": "object",
+        "required": [
+          "reference_id",
+          "task_id",
+          "query",
+          "response",
+          "timestamp",
+          "disclaimer_text"
+        ],
+        "properties": {
+          "disclaimer_text": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "reference_id": {
+            "type": "string"
+          },
+          "response": {
+            "type": "string"
+          },
+          "task_id": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      },
+      "IAMPolicyDetails": {
+        "type": "object",
+        "required": [
+          "policy_name",
+          "policy_arn"
+        ],
+        "properties": {
+          "policy_arn": {
+            "type": "string"
+          },
+          "policy_name": {
+            "type": "string"
+          }
+        }
+      },
+      "LlmModel": {
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "model_id",
+          "model_type"
+        ],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "model_id": {
+            "type": "string"
+          },
+          "model_type": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "secret_name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "OnboardingRequest": {
+        "type": "object",
+        "required": [
+          "app_name",
+          "app_description",
+          "allowed_models",
+          "app_datasource"
+        ],
+        "properties": {
+          "allowed_models": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LlmModel"
+            }
+          },
+          "app_datasource": {
+            "$ref": "#/components/schemas/AppDataSource"
+          },
+          "app_description": {
+            "type": "string"
+          },
+          "app_name": {
+            "type": "string"
+          }
+        }
+      },
+      "RetrievalRequest": {
+        "type": "object",
+        "required": [
+          "user_details",
+          "query",
+          "additional_prompt"
+        ],
+        "properties": {
+          "additional_prompt": {
+            "type": "string"
+          },
+          "app_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "query": {
+            "type": "string"
+          },
+          "task_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "user_details": {
+            "$ref": "#/components/schemas/UserDetails"
+          }
+        }
+      },
+      "SampleRows": {
+        "type": "object",
+        "required": [
+          "top_rows",
+          "random_rows",
+          "bottom_rows"
+        ],
+        "properties": {
+          "bottom_rows": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "random_rows": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "top_rows": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Table": {
+        "type": "object",
+        "required": [
+          "name",
+          "descriptions",
+          "schema",
+          "columns"
+        ],
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Column"
+            }
+          },
+          "descriptions": {
+            "type": "string"
+          },
+          "fact_phrases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "fact_words": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "sample_rows": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SampleRows"
+              }
+            ],
+            "nullable": true
+          },
+          "schema": {
+            "type": "string"
+          },
+          "search_keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UserDetails": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "access_details"
+        ],
+        "properties": {
+          "access_details": {
+            "$ref": "#/components/schemas/AccessDetails"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

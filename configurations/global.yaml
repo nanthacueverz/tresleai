@@ -1,0 +1,95 @@
+tresle_version: "0.1.0"
+release_date: "2022-01-01"
+environment: "Development"
+env_identifier: "dev"
+region: "us-west-2"
+service_name: "Tresle"
+product_name: "tresleai"
+micro_services:
+  logging:
+    version: "0.1.0"
+    docker_version: "sha256:1234567890"
+    type:
+      - "Info"
+      - "Error"
+  audit:
+    version: "0.1.0"
+    docker_digest: "sha256:1234567890"
+  metric:
+    version: "0.1.0"
+    docker_digest: "sha256:1234567890"
+  core:
+    version: "0.1.0"
+    docker_digest: "sha256:1234567890"
+  facade:
+    version: "0.1.0"
+    docker_digest: "sha256:1234567890"
+  event_processor:
+    version: "0.1.0"
+    docker_digest: "sha256:1234567890"
+  knowledge_extraction:
+    version: "0.1.0"
+    docker_digest: "sha256:1234567890"
+  admin_ui:
+    version: "0.1.0"
+    docker_digest: "sha256:1234567890"
+supported_data_source_types:
+  file_store:
+    - "s3"
+  data_store:
+    - "rds_mysql"
+    - "rds_postgres"
+    - "opensearch"
+supported_file_types:
+  image:
+    - "jpg"
+    - "jpeg"
+    - "png"
+    - "gif"
+    - "bmp"
+    - "webp"
+  text:
+    - "txt"
+    - "docx"
+    - "pdf"
+    - "ppt"
+    - "xls"
+    - "xlsx"
+    - "csv"
+cors_allowed_origins:
+    - https://admin-ui.dev.tresle.ai
+    - https://product-app.dev.tresle.ai
+graph_db:
+  neo4j:
+    neo4j_url: "bolt://neo4j-app.neo4j:7687"
+    neo4j_username: "neo4j"
+    neo4j_password: "e47wubDUz6nlt@uX"
+kafka_brokers: "kafka:9092"
+kafka_trailing_message: "Datasources_End"
+global_artifact: "s3://tresleai-knowledgebase-test/temp/"
+mongo_db:
+  mongo_db_url: "mongodb://<UPDATE_USERNAME>:<UPDATE_PASSWORD>@host.docker.internal:27017/?tls=true&tlsCAFile=%2Fusr%2Fsrc%2Fapp%2Fglobal-bundle.pem&tlsAllowInvalidCertificates=true&retryWrites=false&directConnection=true"
+  mongo_db_database_name: "tresle-test"
+  mongo_db_app_collection: "tresle-test-app"
+  mongo_db_id_collection: "tresle-test-id"
+  mongo_db_ui_summary_collection: "tresle-test-ui-summary"
+knowledge_engine:
+  endpoint: "query/full"
+tresleai_urls:
+  admin_ui_url: https://admin-ui.dev.tresle.ai
+  audit_service_url: http://tresleai-audit-service.tresleai
+  core_service_url: http://localhost:8003
+  event_processor_service_url: http://tresleai-event-processor-service.tresleai
+  facade_service_url: https://facade-service.dev.tresle.ai
+  knowledge_extraction_url: http://tresleai-knowledge-extraction-service.tresleai
+  kubernetes_dashboard_url: https://kubernetes-dashboard.dev.tresle.ai/#/workloads?namespace=tresleai
+  logging_service_url: http://tresleai-logging-service.tresleai
+  metric_service_url: http://tresleai-metric-service.tresleai
+  product_app_url: https://product-app.dev.tresle.ai
+tracing_layer_levels:
+  fmt_layer_level: "INFO"
+  fmt_layer_service_exception_level: "DEBUG"
+  peripheral_services_layer_level: "INFO"
+tracing_layer_debug_mode: false
+tracing_layer_system_app_name: "tresleai-system"
+general_message: "Internal Error. Please contact tresleai support team."

@@ -1,0 +1,4 @@
+[submodule "submodules/tresleai-utils-common"]
+	path = submodules/tresleai-utils-common
+	url = git@github.com:tresleai/tresleai-utils-common.git
+	branch = develop

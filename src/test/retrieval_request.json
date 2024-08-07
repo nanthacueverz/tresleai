@@ -1,0 +1,37 @@
+{
+  "user_details": {
+    "user_id":"dinesh.shanmugasundaram@orcaholding.ai",
+    "access_details": {
+      "iam_policy_details": [
+        {
+          "policy_name": "AdministratorAccess",
+          "policy_arn": "arn:aws:iam::aws:policy/AdministratorAccess"
+        },
+        {
+          "policy_name": "AmazonEC2ContainerRegistryFullAccess",
+          "policy_arn": "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
+        },
+        {
+          "policy_name": "AmazonEC2FullAccess",
+          "policy_arn": "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+        },
+        {
+          "policy_name": "AmazonEKSClusterPolicy",
+          "policy_arn": "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+        }
+      ],
+      "db_policy_details": [
+        {
+            "database_name": "",
+            "table_name": ""
+        },
+        {
+            "database_name": "",
+            "table_name": ""
+        }
+      ]
+    }
+  },
+  "query": "test query",
+  "additional_prompt": "test prompt"
+}
