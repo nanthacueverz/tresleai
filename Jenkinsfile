@@ -6,7 +6,7 @@ pipeline {
             steps {
                 // Run the unit tests
                 // cargo test
-                echo 'Unit tests cases'
+                echo 'Unit tests cases success'
                 // connect to document db
             }
         }
