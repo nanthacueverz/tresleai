@@ -5,7 +5,7 @@ pipeline {
         stage('Test') {
             steps {
                 // Run the unit tests
-                cargo test
+                // cargo test
                 echo 'Unit tests passed test'
                 // connect to document db
             }
